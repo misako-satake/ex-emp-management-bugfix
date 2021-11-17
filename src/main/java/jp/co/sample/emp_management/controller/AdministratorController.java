@@ -1,5 +1,8 @@
 package jp.co.sample.emp_management.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -10,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.sample.emp_management.domain.Administrator;
@@ -73,7 +78,7 @@ public class AdministratorController {
 	 *            管理者情報用フォーム
 	 * @return ログイン画面へリダイレクト
 	 */
-	@RequestMapping("/insert")
+	@RequestMapping(value="/insert",method = RequestMethod.POST)
 	public String insert(@Validated InsertAdministratorForm form,
 			BindingResult result,RedirectAttributes redirectAttributes) {
 		
@@ -82,11 +87,19 @@ public class AdministratorController {
 		}
 		
 		Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
-		redirectAttributes.addFlashAttribute("administrator", administrator);
-		return "redirect:/";
+		
+		
+		if(form.getPassword().equals(form.getPassword2())) {
+			// フォームからドメインにプロパティ値をコピー
+			BeanUtils.copyProperties(form, administrator);
+			administratorService.insert(administrator);
+			//redirectAttributes.addFlashAttribute("administrator", administrator);
+			return "redirect:/";
+		}else {
+			System.out.println(form.getPassword() +" "+ form.getPassword2());
+			return toInsert();
+		}
+		
 	}
 
 	/////////////////////////////////////////////////////
@@ -114,10 +127,12 @@ public class AdministratorController {
 	@RequestMapping("/login")
 	public String login(LoginForm form, BindingResult result, Model model) {
 		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
+		
 		if (administrator == null) {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}
+		session.setAttribute("administratorName", administrator.getName());
 		return "forward:/employee/showList";
 	}
 	
@@ -133,6 +148,30 @@ public class AdministratorController {
 	public String logout() {
 		session.invalidate();
 		return "redirect:/";
+	}
+	
+
+	@ResponseBody
+	@RequestMapping(value = "/check", method = RequestMethod.POST)
+	public Map<String, String> check(String password, String password2) {
+		
+		// 画面にレスポンスするデータをMapオブジェクトとして用意
+		Map<String, String> map = new HashMap<>();
+		
+		// パスワード一致チェック
+				String validationErrorMessage2 = null;
+				if (password.equals(password2)) {
+					validationErrorMessage2 = "確認用パスワード入力OK!";
+				} else {
+					validationErrorMessage2 = "パスワードが一致していません";
+				}
+	
+				// レスポンスするMapオブジェクトに、メッセージを格納
+				map.put("validationErrorMessage2", validationErrorMessage2);
+				
+				System.out.println(password + ":" + password2); // デバッグ用コンソール出力
+				
+				return map;
 	}
 	
 }
