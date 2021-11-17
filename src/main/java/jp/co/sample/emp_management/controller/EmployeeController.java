@@ -100,11 +100,13 @@ public class EmployeeController {
 	@RequestMapping("/search")
 	public String search(String employeeName,Model model) {
 		List<Employee> employeeList = employeeService.findByName(employeeName);
+		System.out.println(employeeList);
 		if(employeeList.size()==0) {
 			employeeList = employeeService.showList();
 			model.addAttribute("noneMessage", "1件もありませんでした");
 		}
 			model.addAttribute("employeeList",employeeList);
+			model.addAttribute("size", employeeList.size());
 			return "employee/list";
 	}
 	

@@ -93,4 +93,13 @@ public class EmployeeRepository {
 		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
 		return employeeList;
 	}
+	
+	/**
+	 * 従業員情報を登録します.
+	 */
+	public void insert(Employee employee) {
+		String sql = "INSERT INTO employees(id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count) "
+				+ "VALUES(:id,:name,:image,:gender,:hire_date,:mail_address,:zip_code,:address,:telephone,:salary,:characteristics,:dependents_count)";
+		
+	}
 }

@@ -69,7 +69,8 @@
 				<button>検索</button>
 				</form>
 				<hr>
-				<div th:text="${noneMessage}"></div>
+				<div th:text="${noneMessage}" style="color:red"></div>
+				<div th:text="${size}+件の表示結果" style="color:red"></div>
 				<table class="table table-striped">
 					<thead>
 						<tr>
