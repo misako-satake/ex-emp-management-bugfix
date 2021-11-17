@@ -80,7 +80,7 @@ public class AdministratorController {
 	 */
 	@RequestMapping(value="/insert",method = RequestMethod.POST)
 	public String insert(@Validated InsertAdministratorForm form,
-			BindingResult result,RedirectAttributes redirectAttributes) {
+			BindingResult result,RedirectAttributes redirectAttributes,Model model) {
 		
 		if(result.hasErrors()) {
 			return toInsert();
@@ -88,17 +88,21 @@ public class AdministratorController {
 		
 		Administrator administrator = new Administrator();
 		
-		
-		if(form.getPassword().equals(form.getPassword2())) {
-			// フォームからドメインにプロパティ値をコピー
-			BeanUtils.copyProperties(form, administrator);
-			administratorService.insert(administrator);
-			//redirectAttributes.addFlashAttribute("administrator", administrator);
-			return "redirect:/";
-		}else {
-			System.out.println(form.getPassword() +" "+ form.getPassword2());
-			return toInsert();
+		try {
+			if(form.getPassword().equals(form.getPassword2())) {
+				// フォームからドメインにプロパティ値をコピー
+				BeanUtils.copyProperties(form, administrator);
+				administratorService.insert(administrator);
+				//redirectAttributes.addFlashAttribute("administrator", administrator);
+				return "redirect:/";
+			}else {
+				System.out.println(form.getPassword() +" "+ form.getPassword2());
+				return toInsert();
+			}
+		}catch(Exception e) {
+			model.addAttribute("mailAddressError", "登録済みのメールアドレスです");
 		}
+				return toInsert();
 		
 	}
 

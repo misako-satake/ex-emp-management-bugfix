@@ -83,4 +83,11 @@ public class EmployeeRepository {
 		String updateSql = "UPDATE employees SET dependents_count=:dependentsCount WHERE id=:id";
 		template.update(updateSql, param);
 	}
+	
+	/**
+	 * 従業員情報を名前から検索します.
+	 */
+	public List<Employee> findByName(String employeeName){
+		return null;
+	}
 }
