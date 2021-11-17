@@ -39,8 +39,8 @@
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員管理</a></li>
 					</ul>
-					<p class="navbar-text navbar-right">
-						<span th:text="${administratorName}">山田太郎</span>さんこんにちは！
+					<p class="navbar-text navbar-right" th:object="${administratorForm}">
+						<span th:text="${session.administratorName}">山田太郎</span>さんこんにちは！
 						&nbsp;&nbsp;&nbsp;
 						<a href="../administrator/login.html" class="navbar-link" th:href="@{/logout}">ログアウト</a>
 					</p>
@@ -63,7 +63,14 @@
 <!-- ここから上を編集する必要はありません -->
 
 <!-- ここにモックのtable要素を貼り付けます -->
-
+				<hr>
+				 <form th:action="@{/employee/search}"> 
+				従業名検索：<input type="text" name="employeeName">
+				<button>検索</button>
+				</form>
+				<hr>
+				<div th:text="${noneMessage}" style="color:red"></div>
+				<div th:text="${size}+件の表示結果" style="color:red"></div>
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -73,6 +80,7 @@
 						</tr>
 					</thead>
 					<tbody>
+						
 						<tr th:each="employee : ${employeeList}">
 							<td>
 								<a href="detail.html" th:href="@{'/employee/showDetail?id=' + ${employee.id}}">

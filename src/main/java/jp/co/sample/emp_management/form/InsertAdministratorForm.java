@@ -24,6 +24,17 @@ public class InsertAdministratorForm {
 	@Length(min=8,message="パスワードは8文字以上です")
 	@Pattern(regexp="^[0-9a-zA-Z]+$",message="パスワードは全半角英数字で入力してください")
 	private String password;
+	//@Length(min=8,message="パスワードは8文字以上です")
+	//@Pattern(regexp="^[0-9a-zA-Z]+$",message="パスワードは全半角英数字で入力してください")
+	private String password2;
+
+	public String getPassword2() {
+		return password2;
+	}
+
+	public void setPassword2(String password2) {
+		this.password2 = password2;
+	}
 
 	/**
 	 * @return the name

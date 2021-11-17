@@ -1,6 +1,8 @@
 package jp.co.sample.emp_management.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.sample.emp_management.domain.Employee;
 import jp.co.sample.emp_management.form.UpdateEmployeeForm;
@@ -92,4 +96,18 @@ public class EmployeeController {
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
 	}
+	
+	@RequestMapping("/search")
+	public String search(String employeeName,Model model) {
+		List<Employee> employeeList = employeeService.findByName(employeeName);
+		System.out.println(employeeList);
+		if(employeeList.size()==0) {
+			employeeList = employeeService.showList();
+			model.addAttribute("noneMessage", "1件もありませんでした");
+		}
+			model.addAttribute("employeeList",employeeList);
+			model.addAttribute("size", employeeList.size());
+			return "employee/list";
+	}
+	
 }
