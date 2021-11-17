@@ -88,6 +88,9 @@ public class EmployeeRepository {
 	 * 従業員情報を名前から検索します.
 	 */
 	public List<Employee> findByName(String employeeName){
-		return null;
+		String sql = "SELECT * FROM employees WHERE name LIKE :name;";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%"+employeeName+"%");
+		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+		return employeeList;
 	}
 }

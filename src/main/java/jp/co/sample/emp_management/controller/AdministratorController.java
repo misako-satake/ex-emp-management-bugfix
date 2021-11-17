@@ -1,6 +1,7 @@
 package jp.co.sample.emp_management.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jp.co.sample.emp_management.domain.Administrator;
+import jp.co.sample.emp_management.domain.Employee;
 import jp.co.sample.emp_management.form.InsertAdministratorForm;
 import jp.co.sample.emp_management.form.LoginForm;
 import jp.co.sample.emp_management.service.AdministratorService;
@@ -153,7 +155,6 @@ public class AdministratorController {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
 
 	@ResponseBody
 	@RequestMapping(value = "/check", method = RequestMethod.POST)
